@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Hullitas Fashion</title>
+  <style>
+    body { font-family: Arial, sans-serif; max-width: 700px; margin: 0 auto; padding: 20px; background: #ffffff;}
+    .container { background-color:rgb(123, 208, 248); padding: 30px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);}
+    h1 { color: #333; text-align: center;}
+    .form-group { margin-bottom: 18px;}
+    label { display: block; margin-bottom: 5px; font-weight: bold;}
+    input, select, textarea { width: 100%; padding: 8px; border: 1.5px solid #ddd; border-radius: 4px; font-size: 15px;}
+    input[type="checkbox"], input[type="radio"], input[type="file"], input[type="image"] { width: auto;}
+    button, input[type="submit"], input[type="reset"], input[type="button"] { width: auto; padding: 10px 20px; margin-top: 10px; border-radius: 4px; border: none; background: #a767cc; color: #fff; cursor: pointer;}
+    button:hover, input[type="submit"]:hover, input[type="reset"]:hover, input[type="button"]:hover { background: #a767cc;}
+    .resultado { margin-top: 30px; padding: 20px; background: #e8f5e8; border-radius: 4px; border-left: 4px solid #a767cc; display: none;}
+    .dato { margin-bottom: 10px; }
+    .etiqueta { font-weight: bold; color: #1976d2;}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1 style="font-family:Georgia, 'Times New Roman', Times, serif;">🐶Realiza tú pedido🐈</h1>
+    <form id="formMascotas">
+      <div class="form-group">
+        <label for="nombreCliente">Nombre del cliente:</label>
+        <input type="text" id="nombreCliente" name="nombrecliente" required placeholder="tu nombre completo"/>
+      </div>
+      <div class="form-group">
+        <label for="email">Correo electrónico:</label>
+        <input type="email" id="email" name="email" required placeholder="ejemplo@correo.com"/>
+      </div>
+      <div class="form-group">
+        <label for="telefono">Teléfono:</label>
+        <input type="tel" id="telefono" name="telefono" placeholder="ej: 3001234567"/>
+      </div>
+      <div class="form-group">
+        <label for="tipoMascota">Tipo de mascota:</label>
+        <input type="radio" id="perro" name="tipomascota" value="perro" required> <label for="perro" style="display:inline;">Perro</label>
+        <input type="radio" id="gato" name="tipomascota" value="gato"> <label for="gato" style="display:inline;">Gato</label>
+      </div>
+      <div class="form-group">
+        <label for="accesorios">Accesorios a comprar:</label>
+        <input type="checkbox" id="collar" name="accesorios" value="collar"> <label for="collar" style="display:inline;">Collar</label>
+        <input type="checkbox" id="juguete" name="accesorios" value="juguete"> <label for="juguete" style="display:inline;">Juguete</label>
+        <input type="checkbox" id="cama" name="accesorios" value="cama"> <label for="cama" style="display:inline;">Cama</label>
+        <input type="checkbox" id="comida" name="accesorios" value="comida"> <label for="comida" style="display:inline;">Comida</label>
+      </div>
+      <div class="form-group">
+        <label for="fechaHoraPedido">Fecha y hora del pedido:</label>
+        <input type="datetime-local" id="fechaHoraPedido" name="fechayhoradelpedido"/>
+      </div>
+      <div class="form-group">
+        <label for="cantidad">Cantidad de productos:</label>
+        <input type="number" id="cantidad" name="cantidaddeproductos" min="1" max="20"/>
+      </div>
+      <div class="form-group">
+        <label for="metodoPago">Método de pago:</label>
+        <select id="metodoPago" name="metododepago" required>
+          <option value="">selecciona un método</option>
+          <option value="contra entrega">pago contra entrega</option>
+          <option value="nequi">nequi</option>
+          <option value="tarjeta de credito">tarjeta de credito</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="buscarProducto">Buscar producto:</label>
+        <input type="search" id="buscarProducto" name="buscarproducto" placeholder="buscar..."/>
+      </div>
+      <div class="form-group">
+        <label for="urlProducto">URL del producto favorito:</label>
+        <input type="url" id="urlProducto" name="urldelproductofavorito" placeholder="https://"/>
+      </div>
+      <div class="form-group">
+        <label for="contrasena">Contraseña para tu cuenta:</label>
+        <input type="password" id="contrasena" name="contrasena"/>
+      </div>
+      <div class="form-group">
+        <label for="fotoMascota">Foto de tu mascota:</label>
+        <input type="file" id="fotoMascota" name="fotodemascota" accept="image/*"/>
+      </div>
+      <div class="form-group">
+        <input type="hidden" id="codigoDescuento" name="codigodescuento" value="mascota10"/>
+      </div>
+      <div class="form-group">
+        <label>Imagen de envío (simulación):</label>
+        <input type="image" src="https://cdn-icons-png.flaticon.com/512/616/616408.png" alt="enviar" width="40" height="40"/>
+      </div>
+      <input style="color:#1976d2;" type="reset" value="limpiar">
+      <input  style="color: #1976d2;" value="enviar">
+    </form>
+    <div id="resultado" class="resultado"></div>
+  </div>
+  <script>
+    document.getElementById('formMascotas').addEventListener('submit', function(evento) {
+      evento.preventDefault();
+      const datos = new FormData(evento.target);
+      let datosHTML = '';
+      for (let [campo, valor] of datos.entries()) {
+        if (campo === 'codigodescuento') continue;
+        datosHTML += `<div class="dato"><span class="etiqueta">${campo}:</span> ${valor}</div>`;
+      }
+      document.getElementById('resultado').innerHTML = `<h3>✅ ¡Pedido enviado!</h3>${datosHTML}`;
+      document.getElementById('resultado').style.display = 'block';
+    });
+  </script>
+</body>
+</html>
